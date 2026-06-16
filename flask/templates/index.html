@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block head %}
+Home
+{% endblock %}
+
+{% block body %}
+<!-- To-Do Addition Form Panel -->
+<section class="glass-panel" style="margin-bottom: 2rem;">
+    <form action="/" method="POST" class="todo-form">
+        <div class="input-group">
+            <input 
+                type="text" 
+                name="content" 
+                id="todo-content-input" 
+                class="todo-input" 
+                placeholder="What needs to be done?" 
+                required 
+                autocomplete="off"
+                autofocus
+            >
+        </div>
+        <button type="submit" class="btn btn-primary" id="add-task-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Add Task
+        </button>
+    </form>
+</section>
+
+<!-- Tasks List Panel -->
+<section class="glass-panel">
+    {% if tasks|length < 1 %}
+    <div class="empty-state">
+        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="9" y1="15" x2="15" y2="15"></line>
+            <line x1="9" y1="11" x2="15" y2="11"></line>
+            <line x1="9" y1="19" x2="15" y2="19"></line>
+        </svg>
+        <h3>No tasks yet</h3>
+        <p>Type in the input above and press Enter or click "Add Task" to start organizing your schedule.</p>
+    </div>
+    {% else %}
+    <div class="tasks-container">
+        <table class="tasks-table">
+            <thead>
+                <tr>
+                    <th style="width: 55%;">Task</th>
+                    <th style="width: 25%;">Added</th>
+                    <th style="width: 20%; text-align: right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>
+                        <span class="task-content">{{ task.content }}</span>
+                    </td>
+                    <td>
+                        <span class="task-date">{{ task.date_created.strftime('%b %d, %Y - %I:%M %p') }}</span>
+                    </td>
+                    <td>
+                        <div class="task-actions">
+                            <a href="/update/{{ task.id }}" class="btn btn-secondary btn-sm" id="edit-task-{{ task.id }}">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                                Edit
+                            </a>
+                            <a href="/delete/{{ task.id }}" class="btn btn-danger btn-sm" id="delete-task-{{ task.id }}">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                                </svg>
+                                Delete
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}
